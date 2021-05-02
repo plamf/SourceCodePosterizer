@@ -11,6 +11,10 @@ namespace SourceCodePosterizer
 
         private static void Main(string[] args)
         {
+#if DEBUG
+            args = new[] { $"-p{new DirectoryInfo(Directory.GetCurrentDirectory()).Parent?.Parent?.Parent?.FullName}" };
+#endif
+
             Parser.Default.ParseArguments<Options>(args)
                 .WithParsed(RunOptions)
                 .WithNotParsed(HandleParseError);

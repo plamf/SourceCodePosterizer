@@ -1,8 +1,8 @@
-# SCP - Source Code Posterizer
+# Source Code Posterizer
 Generate Images from your Code
 
 ## Description
-I got bored and thought "Maybe I want to print out my code and make a poster out of it?"
+I got bored and thought "Maybe I want to print out my code and make a poster out of it?"  
 This CLI will take all files (with restrictions) from a path, minifies them and generates an image.
 
 ## Basic usage
