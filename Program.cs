@@ -12,9 +12,9 @@ namespace SourceCodePosterizer
         private static void Main(string[] args)
         {
 #if DEBUG
-            // Options used to generate the demo pictures
-            var foreground = "#00947B";
-            var background = "#FF7A45";
+            // A helper to quickly generate different images during debugging
+            var foreground = "FFFFFF";
+            var background = "000000";
             args = new[] { 
                 $"-p{new DirectoryInfo(Directory.GetCurrentDirectory()).Parent?.Parent?.Parent?.FullName}",
                 $"-f{foreground}",
@@ -34,6 +34,15 @@ namespace SourceCodePosterizer
         {
             if (Directory.Exists(opts.FilePath))
             {
+                if (!opts.ForegroundColor.StartsWith("#"))
+                {
+                    opts.ForegroundColor = opts.ForegroundColor.Insert(0, "#");
+                }
+                if (!opts.BackgroundColor.StartsWith("#"))
+                {
+                    opts.BackgroundColor = opts.BackgroundColor.Insert(0, "#");
+                }
+
                 ProcessDirectory(opts.FilePath, opts.Filetypes);
 
                 var minifiedText = TextHandler.MinifyText(_rawText, opts.TextCase);
