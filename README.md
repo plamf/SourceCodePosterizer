@@ -23,4 +23,5 @@ Short Name | Long Name | Default
 `-b` | `--background-color` | #FFFFFF
 `-c` | `--casing` | Default
 `-s` | `--size` | 16
-`-y` | `--filetypes` | *.cs,*.css,*.scss,*.js,*.json,*.ts,*.html,*.xml,*.xaml,*.html,*.txt,*.md
+`-y` | `--filetypes` | *.cs,*.css,*.scss,*.js,*.json,*.ts,*.html,*.txt,*.md
+`-u` | `--border` | 0
