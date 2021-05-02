@@ -7,7 +7,7 @@ namespace SourceCodePosterizer
         [Option('p', "path", Required = true, HelpText = "The path to your source files.")]
         public string FilePath { get; set; }
 
-        [Option('t', "title", Required = false, HelpText = "A title for your header/filename.")]
+        [Option('t', "title", Required = false, HelpText = "Adds a title to your Image.")]
         public string Title { get; set; } = "SCP";
 
         [Option('l', "line-length", Required = false,
@@ -29,6 +29,10 @@ namespace SourceCodePosterizer
         [Option('y', "filetypes", Required = false,
             HelpText = "Look up only the selected files. Multiple filetypes are possible. Usage: *.cs|*.css")]
         public string Filetypes { get; set; } =
-            "*.cs,*.css,*.scss,*.js,*.json,*.ts,*.html,*.xml,*.xaml,*.html,*.txt,*.md";
+            "*.cs,*.css,*.scss,*.js,*.json,*.ts,*.html,*.txt,*.md";
+
+        [Option('u', "border", Required = false,
+            HelpText = "Frames the image with a border in the same color as the foreground. Default width: 0")]
+        public int Border { get; set; }
     }
 }

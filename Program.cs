@@ -12,7 +12,17 @@ namespace SourceCodePosterizer
         private static void Main(string[] args)
         {
 #if DEBUG
-            args = new[] { $"-p{new DirectoryInfo(Directory.GetCurrentDirectory()).Parent?.Parent?.Parent?.FullName}" };
+            // Options used to generate the demo pictures
+            var foreground = "#00947B";
+            var background = "#FF7A45";
+            args = new[] { 
+                $"-p{new DirectoryInfo(Directory.GetCurrentDirectory()).Parent?.Parent?.Parent?.FullName}",
+                $"-f{foreground}",
+                $"-b{background}",
+                $"-u{80}",
+                "-y*.cs",
+                "-l100"
+            };
 #endif
 
             Parser.Default.ParseArguments<Options>(args)
@@ -28,8 +38,8 @@ namespace SourceCodePosterizer
 
                 var minifiedText = TextHandler.MinifyText(_rawText, opts.TextCase);
                 var formattedText = TextHandler.FormatText(minifiedText, opts.LineLength);
-                var poster = ImageHandler.CreateImage(formattedText, opts.ForegroundColor, opts.BackgroundColor,
-                    opts.FontSize);
+                var poster = ImageHandler.CreateImage(formattedText,opts.Title, opts.ForegroundColor, opts.BackgroundColor,
+                    opts.FontSize, opts.Border);
 
                 ImageHandler.SaveImage(opts.FilePath, opts.Title, poster);
             }
