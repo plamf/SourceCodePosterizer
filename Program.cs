@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Drawing;
-using System.Drawing.Imaging;
 using System.IO;
-using System.Linq;
 using CommandLine;
 
 namespace SourceCodePosterizer
@@ -25,11 +22,12 @@ namespace SourceCodePosterizer
             {
                 ProcessDirectory(opts.FilePath, opts.Filetypes);
 
-                var minifiedText = MinifyText(opts.TextCase);
-                var formattedText = FormatText(minifiedText, opts.LineLength);
-                var poster = CreateImage(formattedText, opts.ForegroundColor, opts.BackgroundColor, opts.FontSize);
+                var minifiedText = TextHandler.MinifyText(_rawText, opts.TextCase);
+                var formattedText = TextHandler.FormatText(minifiedText, opts.LineLength);
+                var poster = ImageHandler.CreateImage(formattedText, opts.ForegroundColor, opts.BackgroundColor,
+                    opts.FontSize);
 
-                SaveImage(opts.FilePath, opts.Title, poster);
+                ImageHandler.SaveImage(opts.FilePath, opts.Title, poster);
             }
             else
             {
@@ -37,26 +35,9 @@ namespace SourceCodePosterizer
             }
         }
 
-        private static void SaveImage(string filePath, string filename, Image poster)
-        {
-            var codecInfo = GetEncoderInfo("image/png");
-            var encoderParams = new EncoderParameters(1);
-            var encoderParam = new EncoderParameter(Encoder.Quality, 100L);
-            encoderParams.Param[0] = encoderParam;
-
-            poster.Save(filePath + $"\\{filename}.png", codecInfo, encoderParams);
-        }
-
-        private static string FormatText(string minifiedText, int charsPerLine)
-        {
-            for (var i = 0; i < minifiedText.Length; i += charsPerLine) minifiedText = minifiedText.Insert(i, "\n");
-
-            return minifiedText;
-        }
-
         private static void HandleParseError(IEnumerable<Error> errs)
         {
-            //handle errors
+            //handle errors lol
         }
 
         private static void ProcessDirectory(string targetDirectory, string filetypes)
@@ -74,88 +55,12 @@ namespace SourceCodePosterizer
 
         public static string[] GetFiles(string path, string searchPattern)
         {
-            string[] searchPatterns = searchPattern.Split(',');
-            List<string> files = new List<string>();
-            foreach (string sp in searchPatterns)
+            var searchPatterns = searchPattern.Split(',');
+            var files = new List<string>();
+            foreach (var sp in searchPatterns)
                 files.AddRange(Directory.GetFiles(path, sp));
             files.Sort();
             return files.ToArray();
-        }
-
-        private static string MinifyText(string textcase)
-        {
-            var result = _rawText
-                .Replace("\n", string.Empty)
-                .Replace("\t", string.Empty)
-                .Replace("\r", string.Empty)
-                .Replace(" ", string.Empty);
-
-            if (textcase.Equals("Upper"))
-                result = result.ToUpper();
-            if (textcase.Equals("Lower"))
-                result = result.ToLower();
-
-            return result;
-        }
-
-        private static Image CreateImage(string text, string foregroundColor, string backgroundColor, int fontsize)
-        {
-            var cc = new ColorConverter();
-            var font = new Font("Lucida Console", fontsize, FontStyle.Regular);
-
-            Image img = new Bitmap(1, 1);
-            var drawing = Graphics.FromImage(img);
-            var textSize = drawing.MeasureString(text, font);
-
-            img.Dispose();
-            drawing.Dispose();
-
-            img = new Bitmap((int) textSize.Width, (int) textSize.Height);
-            drawing = Graphics.FromImage(img);
-            drawing.Clear((Color) cc.ConvertFromString(backgroundColor));
-
-            Brush textBrush = new SolidBrush((Color) cc.ConvertFromString(foregroundColor));
-            drawing.DrawString(text, font, textBrush, 0, 0);
-            drawing.Save();
-
-            textBrush.Dispose();
-            drawing.Dispose();
-
-            return img;
-        }
-
-        private static ImageCodecInfo GetEncoderInfo(string mimeType)
-        {
-            var encoders = ImageCodecInfo.GetImageEncoders();
-            return encoders.FirstOrDefault(encoder => encoder.MimeType == mimeType);
-        }
-
-        public class Options
-        {
-            [Option('p', "path", Required = true, HelpText = "The path to your source files.")]
-            public string FilePath { get; set; }
-
-            [Option('t', "title", Required = false, HelpText = "A title for your header/filename.")]
-            public string Title { get; set; } = "SCP";
-
-            [Option('l', "line-length", Required = false,
-                HelpText = "The amount of characters in a single line before a linebreak. Default: 200")]
-            public int LineLength { get; set; } = 200;
-
-            [Option('f', "foreground-color", Required = false, HelpText = "The hexadecimal color of the code.")]
-            public string ForegroundColor { get; set; } = "#000000";
-
-            [Option('b', "background-color", Required = false, HelpText = "The hexadecimal color of the background.")]
-            public string BackgroundColor { get; set; } = "#FFFFFF";
-
-            [Option('c', "casing", Required = false, HelpText = "The casing is either Upper, Lower or Default")]
-            public string TextCase { get; set; } = "Default";
-
-            [Option('s', "size", Required = false, HelpText = "The fontsize. Default: 16")]
-            public int FontSize { get; set; } = 16;
-
-            [Option('y', "filetypes", Required = false, HelpText = "Look up only the selected files. Multiple filetypes are possible. Usage: *.cs|*.css")]
-            public string Filetypes { get; set; } = "*.cs,*.css,*.scss,*.js,*.json,*.ts,*.html,*.xml,*.xaml,*.html,*.txt,*.md";
         }
     }
 }
