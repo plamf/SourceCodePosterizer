@@ -10,6 +10,19 @@ Search all files (according to the set filter) and create an image named "SCP.pn
 ```
 scp -p <DIRECTORY>
 ```
+## Advanced usage
+Create an image with different colors, a title and a border
+```
+scp -p <DIRECTORY> -f #FFFFFF -b #000000 -l 100 -u 80
+```
+Example outputs:  
+<img src = "Demoimages/SCP_4.png" width = "310">
+<img src = "Demoimages/SCP_5.png" width = "310">
+<img src = "Demoimages/SCP_0.png" width = "310">
+<img src = "Demoimages/SCP_1.png" width = "310">
+<img src = "Demoimages/SCP_2.png" width = "310">
+<img src = "Demoimages/SCP_3.png" width = "310">
+
 ## Options
 Note: The width of the image directly corresponds with the amount of characters and the resulting string width.
 Depending on the amount of code, you might want to change the Fontsize or LineLength to get the right aspect ratio for your image.
