@@ -13,7 +13,7 @@ scp -p <DIRECTORY>
 ## Advanced usage
 Create an image with different colors, a title and a border
 ```
-scp -p <DIRECTORY> -f #FFFFFF -b #000000 -l 100 -u 80
+scp -p <DIRECTORY> -f #FFFFFF -b #000000 -l 100 -u 80 -t SCP
 ```
 Example outputs:  
 <img src = "Demoimages/SCP_4.png" width = "310">
