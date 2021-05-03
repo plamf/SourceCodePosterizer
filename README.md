@@ -25,3 +25,10 @@ Short Name | Long Name | Default
 `-s` | `--size` | 16
 `-y` | `--filetypes` | *.cs,*.css,*.scss,*.js,*.json,*.ts,*.html,*.txt,*.md
 `-u` | `--border` | 0
+
+## Build your own release package
+Standard `dotnet` buildscripts apply.  
+For example, if you want to build a self-contained release with NET 5:  
+```
+dotnet publish -r win-x64 -c Release -o publish -p:PublishReadyToRun=true -p:PublishSingleFile=true -p:PublishTrimmed=true --self-contained true -p:IncludeNativeLibrariesForSelfExtract=true
+```
