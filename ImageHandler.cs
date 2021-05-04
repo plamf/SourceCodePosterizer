@@ -6,44 +6,58 @@ namespace SourceCodePosterizer
 {
     public class ImageHandler
     {
-        public static Image CreateImage(string text, string title, string foregroundColor, string backgroundColor, int fontsize, int borderThickness)
+        public static Image CreateImage(string text, Options options)
         {
             var cc = new ColorConverter();
-            var font = new Font("Lucida Console", fontsize, FontStyle.Regular);
-            var bgColor = (Color)cc.ConvertFromString(backgroundColor);
-            var fgColor = (Color)cc.ConvertFromString(foregroundColor);
-            var hasTitle = title != string.Empty;
+            var font = new Font("Lucida Console", options.FontSize, FontStyle.Regular);
+            var bgColor = (Color) cc.ConvertFromString(options.BackgroundColor);
+            var fgColor = (Color) cc.ConvertFromString(options.ForegroundColor);
             var padding = 100;
+            var textBrush = new SolidBrush(fgColor);
 
-            Image img = new Bitmap(1, 1);
+            // Prepare a dummy image
+            var img = new Bitmap(1, 1);
             var drawing = Graphics.FromImage(img);
             var textSize = drawing.MeasureString(text, font);
 
+            // Free up memory used by the dummy image
             img.Dispose();
             drawing.Dispose();
 
-            img = new Bitmap((int) textSize.Width + (padding * 2), (int) textSize.Height + (padding * (hasTitle ? 3:2)));
+            // Create an image with the right size to fit the text
+            img = options.LockAspect ? CreateBitmapByAspect(textSize, padding) : CreateBitmapByTextsize(textSize, padding);
+
+            // Draw the text and colorize the image
             drawing = Graphics.FromImage(img);
             drawing.Clear(bgColor);
-
-            Brush textBrush = new SolidBrush(fgColor);
-            drawing.DrawString(text, font, textBrush, padding, padding * (hasTitle ? 2 : 0));
+            drawing.DrawString(text, font, textBrush, padding, padding * 2);
             drawing.Save();
 
-            if (hasTitle)
-            {
-                AddTitle(img, title, textBrush, fontsize);
-            }
+            AddTitle(img, options.Title, textBrush, options.FontSize);
 
-            if (borderThickness > 0)
-            {
-                AddBorder(img, borderThickness, fgColor);
-            }
+            if (options.BorderThickness > 0) AddBorder(img, options.BorderThickness, fgColor);
 
             textBrush.Dispose();
             drawing.Dispose();
 
             return img;
+        }
+
+        private static Bitmap CreateBitmapByTextsize(SizeF textSize, int padding)
+        {
+            var width = (int) textSize.Width + padding * 2;
+            var height = (int) textSize.Height + padding * 3;
+
+            return new Bitmap(width, height);
+        }
+
+        private static Bitmap CreateBitmapByAspect(SizeF textSize, int padding)
+        {
+            const float aspectRatio = 1.414F;
+            var width = (int)textSize.Width + padding * 2;
+            var aspectCorrectedHeight = width * aspectRatio;
+
+            return new Bitmap(width, (int)aspectCorrectedHeight);
         }
 
         private static void AddBorder(Image img, int thickness, Color color)
@@ -65,7 +79,6 @@ namespace SourceCodePosterizer
                 g.DrawString(title, new Font("Bauhaus 93", fontsize * 3), brush, img.Width / 2, 100, sf);
             }
         }
-
 
         public static void SaveImage(string filePath, string filename, Image poster)
         {

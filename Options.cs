@@ -33,6 +33,10 @@ namespace SourceCodePosterizer
 
         [Option('u', "border", Required = false,
             HelpText = "Frames the image with a border in the same color as the foreground. Default width: 0")]
-        public int Border { get; set; } = 0;
+        public int BorderThickness { get; set; } = 0;
+
+        [Option('a', "lock-aspect", Required = false,
+            HelpText = "Locks the generated image in an 1:414 aspect ratio.")]
+        public bool LockAspect { get; set; }
     }
 }

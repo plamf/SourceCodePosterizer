@@ -10,10 +10,12 @@
                 .Replace("\r", string.Empty)
                 .Replace(" ", string.Empty);
 
-            if (textcase.Equals("Upper"))
-                result = result.ToUpper();
-            if (textcase.Equals("Lower"))
-                result = result.ToLower();
+            result = textcase switch
+            {
+                "Upper" => result.ToUpper(),
+                "Lower" => result.ToLower(),
+                _ => result
+            };
 
             return result;
         }

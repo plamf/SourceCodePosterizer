@@ -13,15 +13,17 @@ namespace SourceCodePosterizer
         {
 #if DEBUG
             // A helper to quickly generate different images during debugging
-            var foreground = "FFFFFF";
-            var background = "000000";
-            args = new[] { 
+            var foreground = "#FFFFFF";
+            var background = "#000000";
+            args = new[]
+            {
                 $"-p{new DirectoryInfo(Directory.GetCurrentDirectory()).Parent?.Parent?.Parent?.FullName}",
                 $"-f{foreground}",
                 $"-b{background}",
                 $"-u{80}",
                 "-y*.cs",
-                "-l100"
+                "-a",
+                "-l110"
             };
 #endif
 
@@ -34,21 +36,14 @@ namespace SourceCodePosterizer
         {
             if (Directory.Exists(opts.FilePath))
             {
-                if (!opts.ForegroundColor.StartsWith("#"))
-                {
-                    opts.ForegroundColor = opts.ForegroundColor.Insert(0, "#");
-                }
-                if (!opts.BackgroundColor.StartsWith("#"))
-                {
-                    opts.BackgroundColor = opts.BackgroundColor.Insert(0, "#");
-                }
+                if (!opts.ForegroundColor.StartsWith("#")) opts.ForegroundColor = opts.ForegroundColor.Insert(0, "#");
+                if (!opts.BackgroundColor.StartsWith("#")) opts.BackgroundColor = opts.BackgroundColor.Insert(0, "#");
 
                 ProcessDirectory(opts.FilePath, opts.Filetypes);
 
                 var minifiedText = TextHandler.MinifyText(_rawText, opts.TextCase);
                 var formattedText = TextHandler.FormatText(minifiedText, opts.LineLength);
-                var poster = ImageHandler.CreateImage(formattedText,opts.Title, opts.ForegroundColor, opts.BackgroundColor,
-                    opts.FontSize, opts.Border);
+                var poster = ImageHandler.CreateImage(formattedText, opts);
 
                 ImageHandler.SaveImage(opts.FilePath, opts.Title, poster);
             }
@@ -76,7 +71,7 @@ namespace SourceCodePosterizer
                 ProcessDirectory(subdirectory, filetypes);
         }
 
-        public static string[] GetFiles(string path, string searchPattern)
+        private static string[] GetFiles(string path, string searchPattern)
         {
             var searchPatterns = searchPattern.Split(',');
             var files = new List<string>();
