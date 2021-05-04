@@ -10,7 +10,7 @@ Search all files (according to the set filter) and create an image named "SCP.pn
 ```
 scp -p <DIRECTORY>
 ```
-You can lock the aspect ratio to 1:414 if you want generate an image you can easily print. As a side-effect, your text can overflow on the y-axis or leave a blank space. Simply increase or decrease the characters per line to manually fit everything into the frame   
+You can lock the aspect ratio to 1:414 if you want to generate an image you can easily print. As a side-effect, your text can overflow on the y-axis or leave a blank space. Simply increase or decrease the characters per line to manually fit everything into the frame   
 ```
 scp -p <DIRECTORY> -l 150 -u 80 -t SCP
 ```
