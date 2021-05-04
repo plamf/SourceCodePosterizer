@@ -14,7 +14,7 @@ You can lock the aspect ratio to 1:414 if you want generate an image you can eas
 ```
 scp -p <DIRECTORY> -l 150 -u 80 -t SCP
 ```
-Example output (locked aspect ratio):
+Example output (locked aspect ratio):  
 <img src = "Demoimages/SCP_aspect_locked.png" width = "300">  
 
 ## Advanced usage
