@@ -32,7 +32,7 @@ Example outputs (unlocked aspect ratio:
 
 ## Options
 Note: The width of the image directly corresponds with the amount of characters and the resulting string width.
-Depending on the amount of code, you might want to change the Fontsize or LineLength to get the right aspect ratio for your image.
+Depending on the amount of code, you might want to change the Fontsize or LineLength to get the right aspect ratio for your image. Alternatively, you can lock the aspect ratio and work from there.
 
 Short Name | Long Name | Default
 --- | --- | ---
