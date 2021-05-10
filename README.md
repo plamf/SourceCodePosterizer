@@ -18,11 +18,11 @@ Example output (locked aspect ratio):
 <img src = "Demoimages/SCP_aspect_locked.png" width = "300">  
 
 ## Advanced usage
-Create an image with different colors, 100 characters per line, 80 pixel border and the title "SCP"
+Create an image with different colors, 100 characters per line, 80 pixel border and the title "SCP". Notice that the aspect ratio is not locked.
 ```
 scp -p <DIRECTORY> -f #FFFFFF -b #000000 -l 100 -u 80 -t SCP
 ```
-Example outputs (unlocked aspect ratio:  
+Example outputs (unlocked aspect ratio):  
 <img src = "Demoimages/SCP_4.png" width = "300">
 <img src = "Demoimages/SCP_5.png" width = "300">
 <img src = "Demoimages/SCP_0.png" width = "300">
